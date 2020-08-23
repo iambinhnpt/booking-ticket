@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 class Seat extends Component {
+  turnGreenSeat = (arr) => {
+    arr.map((ghe) => {
+      document.getElementById(`${ghe.soGhe}`).classList.add("gheDangChon");
+    });
+  };
+
   render() {
     let classGhe = "";
+    this.turnGreenSeat(this.props.bangTinhTien);
+
     return (
       <div>
         <h1 style={{ color: "white" }}>Đặt vé xem phim</h1>
@@ -18,17 +26,31 @@ class Seat extends Component {
                   // Duyet lan luot cac hang, hang dau tien la so thu tu ghe, classNam: rowNumber
                   // Cac hang tu thu 2 tro di la ghe, className: ghe
                   index === 0 ? (classGhe = "rowNumber") : (classGhe = "ghe");
+                  if (ghe.daDat) classGhe = "gheDuocChon";
                   return (
                     <td>
                       <button
                         id={`${ghe.soGhe}`}
                         className={classGhe}
                         onClick={() => {
-                          this.props.pickSeat(ghe);
-
-                          document
-                            .getElementById(`${ghe.soGhe}`)
-                            .classList.toggle("gheDangChon");
+                          if (
+                            !document
+                              .getElementById(`${ghe.soGhe}`)
+                              .classList.contains("gheDuocChon")
+                          ) {
+                            if (
+                              !document
+                                .getElementById(`${ghe.soGhe}`)
+                                .classList.contains("gheDangChon")
+                            ) {
+                              this.props.pickSeat(ghe);
+                            } else {
+                              this.props.xoa(ghe);
+                              document
+                                .getElementById(`${ghe.soGhe}`)
+                                .classList.remove("gheDangChon");
+                            }
+                          }
                         }}
                       >
                         {ghe.soGhe}
@@ -54,11 +76,20 @@ const mapDispatchToProps = (dispatch) => {
       };
       dispatch(action);
     },
+    xoa: (ghe) => {
+      const action = {
+        type: "XOAGHE",
+        ghe,
+      };
+      console.log(action);
+      dispatch(action);
+    },
   };
 };
 const mapStateToProps = (state) => {
   return {
     danhSachGhe: state.BookingReducer.danhSachGhe,
+    bangTinhTien: state.BookingReducer.bangTinhTien,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Seat);

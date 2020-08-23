@@ -1,17 +1,26 @@
 import React, { Component } from "react";
-export default class Booking extends Component {
-  constructor(props) {
-    super(props);
-  }
+import { connect } from "react-redux";
 
+class Booking extends Component {
   renderTable = (dsGhe) => {
     return dsGhe.map((item, index) => {
       console.log(item.soGhe);
 
       return (
         <tr key={index}>
-          <td>{item.soGhe}</td>
-          <td>{item.gia}</td>
+          <td className="text-white">{item.soGhe}</td>
+          <td className="text-white">{item.gia.toLocaleString() + " VND"}</td>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              this.props.xoa(item, index);
+              document
+                .getElementById(`${item.soGhe}`)
+                .classList.remove("gheDangChon");
+            }}
+          >
+            X
+          </button>
         </tr>
       );
     });
@@ -35,7 +44,7 @@ export default class Booking extends Component {
         </div>
         <table className="table table-striped table-inverse table-responsive">
           <thead className="thead-inverse">
-            <tr>
+            <tr className="text-white font-weight-bold">
               <th>Số ghế</th>
               <th>Giá</th>
               <th>Hủy</th>
@@ -44,8 +53,12 @@ export default class Booking extends Component {
           <tbody>{this.renderTable(dsGhe)}</tbody>
           <tfoot>
             <tr>
-              <td>Tổng Tiền</td>
-              <td>150000</td>
+              <td className="font-weight-bold" style={{ color: "orange" }}>
+                Tổng Tiền
+              </td>
+              <td className="font-weight-bold" style={{ color: "orange" }}>
+                {this.props.tongTien.toLocaleString() + " VND"}
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -53,3 +66,18 @@ export default class Booking extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    xoa: (ghe, index) => {
+      const action = {
+        type: "XOA",
+        ghe,
+        index,
+      };
+      dispatch(action);
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Booking);

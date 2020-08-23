@@ -3,6 +3,7 @@ import "./BaiTapBookingTicket.css";
 import Seat from "./Seat";
 import Booking from "./Booking";
 import { connect } from "react-redux";
+import CurrencyFormat from "react-currency-format";
 
 class BookingTicket extends Component {
   render() {
@@ -13,9 +14,15 @@ class BookingTicket extends Component {
             <Seat />
           </div>
           <div className="col-4">
-            <Booking dsGhe={this.props.dsGhe} />
+            <Booking
+              dsGhe={this.props.dsGhe}
+              tongTien={this.props.tongTien}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
           </div>
         </div>
+        <CurrencyFormat thousandSeparator={true} prefix={"$"} />
       </div>
     );
   }
@@ -23,6 +30,7 @@ class BookingTicket extends Component {
 const mapStateToProps = (state) => {
   return {
     dsGhe: state.BookingReducer.bangTinhTien || [],
+    tongTien: state.BookingReducer.tongTien,
   };
 };
 export default connect(mapStateToProps)(BookingTicket);
