@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 class Booking extends Component {
   renderTable = (dsGhe) => {
     return dsGhe.map((item, index) => {
-      console.log(item.soGhe);
-
       return (
         <tr key={index}>
           <td className="text-white">{item.soGhe}</td>
@@ -27,7 +25,7 @@ class Booking extends Component {
   };
   render() {
     let { dsGhe } = this.props;
-    console.log(dsGhe);
+
     return (
       <div>
         <h2>Danh sách ghế bạn chọn</h2>
@@ -60,6 +58,17 @@ class Booking extends Component {
                 {this.props.tongTien.toLocaleString() + " VND"}
               </td>
             </tr>
+            <tr>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  alert("bạn đã thanh toán");
+                  this.props.luuDuLieu();
+                }}
+              >
+                Thanh Toán
+              </button>
+            </tr>
           </tfoot>
         </table>
       </div>
@@ -74,6 +83,12 @@ const mapDispatchToProps = (dispatch) => {
         type: "XOA",
         ghe,
         index,
+      };
+      dispatch(action);
+    },
+    luuDuLieu: () => {
+      const action = {
+        type: "LUU_DU_LIEU",
       };
       dispatch(action);
     },

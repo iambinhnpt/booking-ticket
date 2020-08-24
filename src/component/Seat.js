@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 class Seat extends Component {
   turnGreenSeat = (arr) => {
-    arr.map((ghe) => {
-      document.getElementById(`${ghe.soGhe}`).classList.add("gheDangChon");
+    return arr.map((ghe) => {
+      return document
+        .getElementById(`${ghe.soGhe}`)
+        .classList.add("gheDangChon");
     });
   };
 
